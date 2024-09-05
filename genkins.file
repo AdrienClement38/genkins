@@ -1,0 +1,33 @@
+pipeline {
+    agent {
+        docker {
+            image 'symfony-base' // Replace with your desired Docker image
+        }
+    }
+    
+    stages {
+        stage('Checkout'){
+            steps {
+                git branch: 'main', url: 'https://github.com/iloled/symfony-school/'
+            }
+        }
+        
+        stage('Install'){
+            steps {
+                script {
+                    // Install Composer dependencies
+                    bat 'composer install --no-interaction --prefer-dist'
+                }
+            }
+        }
+        
+        stage('Tests'){
+            steps {
+                
+                script {
+                    bat './vendor/bin/phpunit'
+                }
+            }
+        }
+    }   
+}
